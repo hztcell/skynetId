@@ -1,0 +1,1238 @@
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>NetStream - Layanan Internet Premium</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            fontFamily: {
+              sans: ["Inter", "sans-serif"],
+            },
+            colors: {
+              mono: {
+                50: "#fafafa",
+                100: "#f5f5f5",
+                200: "#e5e5e5",
+                300: "#d4d4d4",
+                400: "#a3a3a3",
+                500: "#737373",
+                600: "#525252",
+                700: "#404040",
+                800: "#262626",
+                900: "#171717",
+                950: "#0a0a0a",
+              },
+            },
+          },
+        },
+      };
+    </script>
+    <style>
+      .glass-effect {
+        background: rgba(255, 255, 255, 0.03);
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+      }
+      .gradient-text {
+        background: linear-gradient(135deg, #fff 0%, #737373 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+      }
+      .card-hover {
+        transition: all 0.3s ease;
+      }
+      .card-hover:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+      }
+      .admin-sidebar {
+        background: linear-gradient(180deg, #0a0a0a 0%, #171717 100%);
+      }
+      input,
+      select,
+      textarea {
+        background-color: #262626 !important;
+        border: 1px solid #404040 !important;
+        color: white !important;
+      }
+      input:focus,
+      select:focus,
+      textarea:focus {
+        border-color: #737373 !important;
+        outline: none !important;
+      }
+      .scrollbar-hide::-webkit-scrollbar {
+        display: none;
+      }
+      .fade-in {
+        animation: fadeIn 0.3s ease-in;
+      }
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+          transform: translateY(10px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+    </style>
+  </head>
+  <body class="bg-mono-950 text-white font-sans antialiased">
+    <!-- Navigation -->
+    <nav class="fixed w-full z-50 glass-effect border-b border-mono-800">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex justify-between h-16 items-center">
+          <div
+            class="flex items-center space-x-2 cursor-pointer"
+            onclick="showUserView()"
+          >
+            <div
+              class="w-8 h-8 bg-white rounded-lg flex items-center justify-center"
+            >
+              <i class="fas fa-wifi text-mono-900 text-lg"></i>
+            </div>
+            <span class="text-xl font-bold tracking-tight">NETSTREAM</span>
+          </div>
+          <div class="hidden md:flex space-x-8">
+            <button
+              onclick="showUserView()"
+              class="hover:text-mono-400 transition"
+            >
+              Beranda
+            </button>
+            <button
+              onclick="scrollToPackages()"
+              class="hover:text-mono-400 transition"
+            >
+              Paket
+            </button>
+            <button
+              onclick="showAdminLogin()"
+              class="px-4 py-2 border border-white rounded-lg hover:bg-white hover:text-mono-900 transition"
+            >
+              <i class="fas fa-lock mr-2"></i>Admin
+            </button>
+          </div>
+          <button class="md:hidden text-2xl" onclick="toggleMobileMenu()">
+            <i class="fas fa-bars"></i>
+          </button>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Mobile Menu -->
+    <div
+      id="mobileMenu"
+      class="fixed inset-0 z-40 bg-mono-950 transform translate-x-full transition-transform duration-300 md:hidden"
+    >
+      <div class="p-8 flex flex-col space-y-6">
+        <button onclick="toggleMobileMenu()" class="self-end text-2xl">
+          <i class="fas fa-times"></i>
+        </button>
+        <button
+          onclick="
+            showUserView();
+            toggleMobileMenu();
+          "
+          class="text-xl"
+        >
+          Beranda
+        </button>
+        <button
+          onclick="
+            scrollToPackages();
+            toggleMobileMenu();
+          "
+          class="text-xl"
+        >
+          Paket Internet
+        </button>
+        <button
+          onclick="
+            showAdminLogin();
+            toggleMobileMenu();
+          "
+          class="text-xl text-mono-400"
+        >
+          Login Admin
+        </button>
+      </div>
+    </div>
+
+    <!-- USER VIEW -->
+    <div id="userView" class="fade-in">
+      <!-- Hero Section -->
+      <section
+        class="relative pt-32 pb-20 px-4 sm:px-6 lg:px-8 overflow-hidden"
+      >
+        <div
+          class="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-mono-800 via-mono-950 to-mono-950 opacity-50"
+        ></div>
+        <div class="max-w-7xl mx-auto relative z-10 text-center">
+          <h1 class="text-5xl md:text-7xl font-bold mb-6 leading-tight">
+            Internet <span class="gradient-text">Cepat & Stabil</span><br />
+            Untuk Masa Depan
+          </h1>
+          <p class="text-xl text-mono-400 mb-10 max-w-2xl mx-auto">
+            Nikmati pengalaman browsing tanpa batas dengan jaringan fiber optic
+            berkecepatan tinggi hingga 1 Gbps
+          </p>
+          <div class="flex flex-col sm:flex-row gap-4 justify-center">
+            <button
+              onclick="scrollToPackages()"
+              class="px-8 py-4 bg-white text-mono-900 rounded-full font-semibold hover:bg-mono-200 transition transform hover:scale-105"
+            >
+              Lihat Paket
+            </button>
+            <button
+              class="px-8 py-4 border border-mono-600 rounded-full font-semibold hover:bg-mono-900 transition"
+            >
+              Hubungi Kami
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <!-- Stats -->
+      <section class="py-12 border-y border-mono-800 bg-mono-900/50">
+        <div
+          class="max-w-7xl mx-auto px-4 grid grid-cols-2 md:grid-cols-4 gap-8 text-center"
+        >
+          <div>
+            <div class="text-3xl font-bold text-white">50K+</div>
+            <div class="text-mono-500 mt-1">Pelanggan Aktif</div>
+          </div>
+          <div>
+            <div class="text-3xl font-bold text-white">99.9%</div>
+            <div class="text-mono-500 mt-1">Uptime Jaringan</div>
+          </div>
+          <div>
+            <div class="text-3xl font-bold text-white">24/7</div>
+            <div class="text-mono-500 mt-1">Dukungan Teknis</div>
+          </div>
+          <div>
+            <div class="text-3xl font-bold text-white">1Gbps</div>
+            <div class="text-mono-500 mt-1">Kecepatan Maksimal</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Packages Section -->
+      <section id="packagesSection" class="py-20 px-4 sm:px-6 lg:px-8">
+        <div class="max-w-7xl mx-auto">
+          <div class="text-center mb-16">
+            <h2 class="text-3xl md:text-4xl font-bold mb-4">
+              Pilih Paket Internet
+            </h2>
+            <p class="text-mono-400">
+              Paket yang dapat disesuaikan dengan kebutuhan Anda
+            </p>
+          </div>
+
+          <div
+            id="userPackages"
+            class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
+          >
+            <!-- Packages will be rendered here -->
+          </div>
+        </div>
+      </section>
+
+      <!-- Promo Banner -->
+      <section
+        id="promoBanner"
+        class="py-16 px-4 bg-gradient-to-r from-mono-900 to-mono-800 border-y border-mono-700 hidden"
+      >
+        <div class="max-w-7xl mx-auto text-center">
+          <div
+            class="inline-block px-4 py-1 bg-white text-mono-900 rounded-full text-sm font-bold mb-4"
+          >
+            PROMO SPESIAL
+          </div>
+          <h3 id="promoText" class="text-3xl md:text-4xl font-bold mb-4"></h3>
+          <p id="promoDesc" class="text-mono-400 text-lg"></p>
+        </div>
+      </section>
+
+      <!-- Footer -->
+      <footer class="bg-mono-950 border-t border-mono-800 pt-16 pb-8 px-4">
+        <div
+          class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-8 mb-12"
+        >
+          <div>
+            <div class="flex items-center space-x-2 mb-4">
+              <div
+                class="w-8 h-8 bg-white rounded-lg flex items-center justify-center"
+              >
+                <i class="fas fa-wifi text-mono-900"></i>
+              </div>
+              <span class="text-xl font-bold">NETSTREAM</span>
+            </div>
+            <p class="text-mono-500">
+              Penyedia layanan internet berkecepatan tinggi untuk rumah dan
+              bisnis Anda.
+            </p>
+          </div>
+          <div>
+            <h4 class="font-semibold mb-4">Layanan</h4>
+            <ul class="space-y-2 text-mono-500">
+              <li>Internet Rumah</li>
+              <li>Internet Bisnis</li>
+              <li>Dedicated Server</li>
+              <li>Cloud Services</li>
+            </ul>
+          </div>
+          <div>
+            <h4 class="font-semibold mb-4">Dukungan</h4>
+            <ul class="space-y-2 text-mono-500">
+              <li>Pusat Bantuan</li>
+              <li>Cek Coverage</li>
+              <li>Status Jaringan</li>
+              <li>Kontak Kami</li>
+            </ul>
+          </div>
+          <div>
+            <h4 class="font-semibold mb-4">Kontak</h4>
+            <ul class="space-y-2 text-mono-500">
+              <li><i class="fas fa-phone mr-2"></i>1500-123</li>
+              <li><i class="fas fa-envelope mr-2"></i>info@netstream.id</li>
+              <li>
+                <i class="fas fa-map-marker-alt mr-2"></i>Jakarta, Indonesia
+              </li>
+            </ul>
+          </div>
+        </div>
+        <div class="border-t border-mono-800 pt-8 text-center text-mono-600">
+          <p>&copy; 2026 NetStream. All rights reserved.</p>
+        </div>
+      </footer>
+    </div>
+
+    <!-- ADMIN LOGIN -->
+    <div
+      id="adminLogin"
+      class="hidden fixed inset-0 z-50 bg-mono-950 flex items-center justify-center p-4"
+    >
+      <div
+        class="max-w-md w-full bg-mono-900 border border-mono-800 rounded-2xl p-8 shadow-2xl"
+      >
+        <div class="text-center mb-8">
+          <div
+            class="w-16 h-16 bg-white rounded-full flex items-center justify-center mx-auto mb-4"
+          >
+            <i class="fas fa-lock text-mono-900 text-2xl"></i>
+          </div>
+          <h2 class="text-2xl font-bold">Admin Panel</h2>
+          <p class="text-mono-500 mt-2">Masuk untuk mengelola layanan</p>
+        </div>
+        <form onsubmit="handleLogin(event)" class="space-y-4">
+          <div>
+            <label class="block text-sm font-medium mb-2">Username</label>
+            <input
+              type="text"
+              id="username"
+              class="w-full px-4 py-3 rounded-lg"
+              placeholder="admin"
+              required
+            />
+          </div>
+          <div>
+            <label class="block text-sm font-medium mb-2">Password</label>
+            <input
+              type="password"
+              id="password"
+              class="w-full px-4 py-3 rounded-lg"
+              placeholder="••••••"
+              required
+            />
+          </div>
+          <button
+            type="submit"
+            class="w-full py-3 bg-white text-mono-900 rounded-lg font-semibold hover:bg-mono-200 transition"
+          >
+            Masuk
+          </button>
+          <button
+            type="button"
+            onclick="showUserView()"
+            class="w-full py-3 border border-mono-700 rounded-lg hover:bg-mono-800 transition"
+          >
+            Kembali ke Website
+          </button>
+        </form>
+        <p class="text-center text-mono-600 text-sm mt-4">
+          Default: admin / admin123
+        </p>
+      </div>
+    </div>
+
+    <!-- ADMIN DASHBOARD -->
+    <div id="adminDashboard" class="hidden min-h-screen bg-mono-950">
+      <!-- Sidebar -->
+      <aside
+        class="fixed left-0 top-0 h-full w-64 admin-sidebar border-r border-mono-800 z-40 hidden md:block"
+      >
+        <div class="p-6 border-b border-mono-800">
+          <div class="flex items-center space-x-2">
+            <div
+              class="w-8 h-8 bg-white rounded-lg flex items-center justify-center"
+            >
+              <i class="fas fa-wifi text-mono-900"></i>
+            </div>
+            <span class="text-xl font-bold">ADMIN</span>
+          </div>
+        </div>
+        <nav class="p-4 space-y-2">
+          <button
+            onclick="showAdminSection('dashboard')"
+            class="w-full text-left px-4 py-3 rounded-lg hover:bg-mono-800 transition flex items-center space-x-3 bg-mono-800"
+            id="nav-dashboard"
+          >
+            <i class="fas fa-home w-5"></i><span>Dashboard</span>
+          </button>
+          <button
+            onclick="showAdminSection('packages')"
+            class="w-full text-left px-4 py-3 rounded-lg hover:bg-mono-800 transition flex items-center space-x-3"
+            id="nav-packages"
+          >
+            <i class="fas fa-box w-5"></i><span>Kelola Paket</span>
+          </button>
+          <button
+            onclick="showAdminSection('promos')"
+            class="w-full text-left px-4 py-3 rounded-lg hover:bg-mono-800 transition flex items-center space-x-3"
+            id="nav-promos"
+          >
+            <i class="fas fa-tag w-5"></i><span>Kelola Promo</span>
+          </button>
+          <button
+            onclick="showAdminSection('settings')"
+            class="w-full text-left px-4 py-3 rounded-lg hover:bg-mono-800 transition flex items-center space-x-3"
+            id="nav-settings"
+          >
+            <i class="fas fa-cog w-5"></i><span>Pengaturan</span>
+          </button>
+        </nav>
+        <div
+          class="absolute bottom-0 left-0 right-0 p-4 border-t border-mono-800"
+        >
+          <button
+            onclick="logout()"
+            class="w-full px-4 py-3 rounded-lg border border-red-600 text-red-500 hover:bg-red-600 hover:text-white transition flex items-center justify-center space-x-2"
+          >
+            <i class="fas fa-sign-out-alt"></i><span>Logout</span>
+          </button>
+        </div>
+      </aside>
+
+      <!-- Mobile Admin Header -->
+      <div
+        class="md:hidden fixed top-0 left-0 right-0 h-16 bg-mono-900 border-b border-mono-800 z-40 flex items-center justify-between px-4"
+      >
+        <span class="font-bold text-lg">ADMIN PANEL</span>
+        <button onclick="toggleAdminMobileMenu()" class="text-2xl">
+          <i class="fas fa-bars"></i>
+        </button>
+      </div>
+
+      <!-- Main Content -->
+      <main class="md:ml-64 pt-16 md:pt-0 min-h-screen">
+        <!-- Dashboard Section -->
+        <div id="admin-dashboard" class="p-8 fade-in">
+          <div class="flex justify-between items-center mb-8">
+            <div>
+              <h1 class="text-3xl font-bold">Dashboard</h1>
+              <p class="text-mono-500 mt-1">Ringkasan layanan internet</p>
+            </div>
+            <button
+              onclick="showUserView()"
+              class="px-4 py-2 border border-mono-700 rounded-lg hover:bg-mono-800 transition text-sm"
+            >
+              <i class="fas fa-eye mr-2"></i>Lihat Website
+            </button>
+          </div>
+
+          <!-- Stats Cards -->
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+            <div class="bg-mono-900 border border-mono-800 rounded-xl p-6">
+              <div class="flex justify-between items-start">
+                <div>
+                  <p class="text-mono-500 text-sm">Total Paket</p>
+                  <h3 class="text-3xl font-bold mt-2" id="totalPackages">0</h3>
+                </div>
+                <div
+                  class="w-12 h-12 bg-mono-800 rounded-lg flex items-center justify-center"
+                >
+                  <i class="fas fa-box text-2xl"></i>
+                </div>
+              </div>
+            </div>
+            <div class="bg-mono-900 border border-mono-800 rounded-xl p-6">
+              <div class="flex justify-between items-start">
+                <div>
+                  <p class="text-mono-500 text-sm">Promo Aktif</p>
+                  <h3 class="text-3xl font-bold mt-2" id="activePromos">0</h3>
+                </div>
+                <div
+                  class="w-12 h-12 bg-mono-800 rounded-lg flex items-center justify-center"
+                >
+                  <i class="fas fa-tag text-2xl"></i>
+                </div>
+              </div>
+            </div>
+            <div class="bg-mono-900 border border-mono-800 rounded-xl p-6">
+              <div class="flex justify-between items-start">
+                <div>
+                  <p class="text-mono-500 text-sm">Rata-rata Harga</p>
+                  <h3 class="text-3xl font-bold mt-2" id="avgPrice">Rp 0</h3>
+                </div>
+                <div
+                  class="w-12 h-12 bg-mono-800 rounded-lg flex items-center justify-center"
+                >
+                  <i class="fas fa-money-bill text-2xl"></i>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Quick Actions -->
+          <div class="bg-mono-900 border border-mono-800 rounded-xl p-6">
+            <h3 class="font-semibold mb-4">Aksi Cepat</h3>
+            <div class="flex flex-wrap gap-4">
+              <button
+                onclick="
+                  showAdminSection('packages');
+                  openPackageModal();
+                "
+                class="px-6 py-3 bg-white text-mono-900 rounded-lg font-medium hover:bg-mono-200 transition"
+              >
+                <i class="fas fa-plus mr-2"></i>Tambah Paket Baru
+              </button>
+              <button
+                onclick="
+                  showAdminSection('promos');
+                  openPromoModal();
+                "
+                class="px-6 py-3 border border-mono-700 rounded-lg hover:bg-mono-800 transition"
+              >
+                <i class="fas fa-plus mr-2"></i>Buat Promo
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Packages Management -->
+        <div id="admin-packages" class="hidden p-8 fade-in">
+          <div class="flex justify-between items-center mb-8">
+            <div>
+              <h1 class="text-3xl font-bold">Kelola Paket</h1>
+              <p class="text-mono-500 mt-1">
+                Tambah, edit, atau hapus paket internet
+              </p>
+            </div>
+            <button
+              onclick="openPackageModal()"
+              class="px-6 py-3 bg-white text-mono-900 rounded-lg font-medium hover:bg-mono-200 transition"
+            >
+              <i class="fas fa-plus mr-2"></i>Tambah Paket
+            </button>
+          </div>
+
+          <div
+            class="bg-mono-900 border border-mono-800 rounded-xl overflow-hidden"
+          >
+            <table class="w-full">
+              <thead class="bg-mono-800 border-b border-mono-700">
+                <tr>
+                  <th class="text-left p-4 font-semibold">Nama Paket</th>
+                  <th class="text-left p-4 font-semibold">Kecepatan</th>
+                  <th class="text-left p-4 font-semibold">Harga/Bulan</th>
+                  <th class="text-left p-4 font-semibold">Status</th>
+                  <th class="text-left p-4 font-semibold">Aksi</th>
+                </tr>
+              </thead>
+              <tbody id="packagesTableBody">
+                <!-- Rows will be rendered here -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Promos Management -->
+        <div id="admin-promos" class="hidden p-8 fade-in">
+          <div class="flex justify-between items-center mb-8">
+            <div>
+              <h1 class="text-3xl font-bold">Kelola Promo</h1>
+              <p class="text-mono-500 mt-1">
+                Atur promo dan diskon untuk pelanggan
+              </p>
+            </div>
+            <button
+              onclick="openPromoModal()"
+              class="px-6 py-3 bg-white text-mono-900 rounded-lg font-medium hover:bg-mono-200 transition"
+            >
+              <i class="fas fa-plus mr-2"></i>Tambah Promo
+            </button>
+          </div>
+
+          <div id="promosList" class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <!-- Promo cards will be rendered here -->
+          </div>
+        </div>
+
+        <!-- Settings -->
+        <div id="admin-settings" class="hidden p-8 fade-in">
+          <h1 class="text-3xl font-bold mb-8">Pengaturan</h1>
+          <div
+            class="bg-mono-900 border border-mono-800 rounded-xl p-6 max-w-2xl"
+          >
+            <h3 class="font-semibold mb-4">Informasi Website</h3>
+            <div class="space-y-4">
+              <div>
+                <label class="block text-sm font-medium mb-2"
+                  >Nama Perusahaan</label
+                >
+                <input
+                  type="text"
+                  class="w-full px-4 py-2 rounded-lg"
+                  value="NetStream"
+                />
+              </div>
+              <div>
+                <label class="block text-sm font-medium mb-2"
+                  >Email Kontak</label
+                >
+                <input
+                  type="email"
+                  class="w-full px-4 py-2 rounded-lg"
+                  value="info@netstream.id"
+                />
+              </div>
+              <div>
+                <label class="block text-sm font-medium mb-2">Telepon</label>
+                <input
+                  type="text"
+                  class="w-full px-4 py-2 rounded-lg"
+                  value="1500-123"
+                />
+              </div>
+              <button
+                class="px-6 py-2 bg-white text-mono-900 rounded-lg font-medium hover:bg-mono-200 transition"
+              >
+                Simpan Perubahan
+              </button>
+            </div>
+          </div>
+        </div>
+      </main>
+    </div>
+
+    <!-- Package Modal -->
+    <div
+      id="packageModal"
+      class="hidden fixed inset-0 z-50 bg-black/80 flex items-center justify-center p-4"
+    >
+      <div
+        class="bg-mono-900 border border-mono-800 rounded-2xl max-w-lg w-full max-h-[90vh] overflow-y-auto"
+      >
+        <div
+          class="p-6 border-b border-mono-800 flex justify-between items-center"
+        >
+          <h3 class="text-xl font-bold" id="packageModalTitle">
+            Tambah Paket Baru
+          </h3>
+          <button
+            onclick="closePackageModal()"
+            class="text-mono-500 hover:text-white"
+          >
+            <i class="fas fa-times text-xl"></i>
+          </button>
+        </div>
+        <form onsubmit="savePackage(event)" class="p-6 space-y-4">
+          <input type="hidden" id="packageId" />
+          <div>
+            <label class="block text-sm font-medium mb-2">Nama Paket</label>
+            <input
+              type="text"
+              id="packageName"
+              class="w-full px-4 py-2 rounded-lg"
+              placeholder="Contoh: Paket Gamer"
+              required
+            />
+          </div>
+          <div>
+            <label class="block text-sm font-medium mb-2"
+              >Kecepatan (Mbps)</label
+            >
+            <input
+              type="number"
+              id="packageSpeed"
+              class="w-full px-4 py-2 rounded-lg"
+              placeholder="Contoh: 50"
+              required
+            />
+          </div>
+          <div>
+            <label class="block text-sm font-medium mb-2"
+              >Harga per Bulan (Rp)</label
+            >
+            <input
+              type="number"
+              id="packagePrice"
+              class="w-full px-4 py-2 rounded-lg"
+              placeholder="Contoh: 300000"
+              required
+            />
+          </div>
+          <div>
+            <label class="block text-sm font-medium mb-2">Deskripsi</label>
+            <textarea
+              id="packageDesc"
+              rows="3"
+              class="w-full px-4 py-2 rounded-lg"
+              placeholder="Deskripsi fitur paket..."
+              required
+            ></textarea>
+          </div>
+          <div>
+            <label class="block text-sm font-medium mb-2"
+              >Fitur (pisahkan dengan koma)</label
+            >
+            <input
+              type="text"
+              id="packageFeatures"
+              class="w-full px-4 py-2 rounded-lg"
+              placeholder="Unlimited, Free Router, 24/7 Support"
+              required
+            />
+          </div>
+          <div class="flex items-center space-x-2">
+            <input
+              type="checkbox"
+              id="packagePopular"
+              class="w-4 h-4 rounded"
+            />
+            <label for="packagePopular" class="text-sm"
+              >Tandai sebagai paket populer</label
+            >
+          </div>
+          <div class="flex space-x-3 pt-4">
+            <button
+              type="button"
+              onclick="closePackageModal()"
+              class="flex-1 py-3 border border-mono-700 rounded-lg hover:bg-mono-800 transition"
+            >
+              Batal
+            </button>
+            <button
+              type="submit"
+              class="flex-1 py-3 bg-white text-mono-900 rounded-lg font-semibold hover:bg-mono-200 transition"
+            >
+              Simpan
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- Promo Modal -->
+    <div
+      id="promoModal"
+      class="hidden fixed inset-0 z-50 bg-black/80 flex items-center justify-center p-4"
+    >
+      <div
+        class="bg-mono-900 border border-mono-800 rounded-2xl max-w-lg w-full"
+      >
+        <div
+          class="p-6 border-b border-mono-800 flex justify-between items-center"
+        >
+          <h3 class="text-xl font-bold" id="promoModalTitle">Tambah Promo</h3>
+          <button
+            onclick="closePromoModal()"
+            class="text-mono-500 hover:text-white"
+          >
+            <i class="fas fa-times text-xl"></i>
+          </button>
+        </div>
+        <form onsubmit="savePromo(event)" class="p-6 space-y-4">
+          <input type="hidden" id="promoId" />
+          <div>
+            <label class="block text-sm font-medium mb-2">Judul Promo</label>
+            <input
+              type="text"
+              id="promoTitle"
+              class="w-full px-4 py-2 rounded-lg"
+              placeholder="Contoh: Diskon 20%"
+              required
+            />
+          </div>
+          <div>
+            <label class="block text-sm font-medium mb-2">Deskripsi</label>
+            <textarea
+              id="promoDescription"
+              rows="3"
+              class="w-full px-4 py-2 rounded-lg"
+              placeholder="Deskripsi promo..."
+              required
+            ></textarea>
+          </div>
+          <div>
+            <label class="block text-sm font-medium mb-2"
+              >Kode Promo (opsional)</label
+            >
+            <input
+              type="text"
+              id="promoCode"
+              class="w-full px-4 py-2 rounded-lg"
+              placeholder="NETSTREAM20"
+            />
+          </div>
+          <div class="flex items-center space-x-2">
+            <input
+              type="checkbox"
+              id="promoActive"
+              class="w-4 h-4 rounded"
+              checked
+            />
+            <label for="promoActive" class="text-sm">Promo aktif</label>
+          </div>
+          <div class="flex space-x-3 pt-4">
+            <button
+              type="button"
+              onclick="closePromoModal()"
+              class="flex-1 py-3 border border-mono-700 rounded-lg hover:bg-mono-800 transition"
+            >
+              Batal
+            </button>
+            <button
+              type="submit"
+              class="flex-1 py-3 bg-white text-mono-900 rounded-lg font-semibold hover:bg-mono-200 transition"
+            >
+              Simpan
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <script>
+      // Data Storage
+      let packages = JSON.parse(localStorage.getItem("netstream_packages")) || [
+        {
+          id: 1,
+          name: "Starter",
+          speed: 20,
+          price: 200000,
+          description: "Cocok untuk penggunaan ringan sehari-hari",
+          features: ["20 Mbps Unlimited", "Free Instalasi", "Router Included"],
+          popular: false,
+          active: true,
+        },
+        {
+          id: 2,
+          name: "Family",
+          speed: 50,
+          price: 350000,
+          description: "Ideal untuk keluarga dengan multiple devices",
+          features: [
+            "50 Mbps Unlimited",
+            "Free Instalasi",
+            "Router Dual Band",
+            "Priority Support",
+          ],
+          popular: true,
+          active: true,
+        },
+        {
+          id: 3,
+          name: "Gamer Pro",
+          speed: 100,
+          price: 550000,
+          description: "Performa tinggi untuk gaming dan streaming 4K",
+          features: [
+            "100 Mbps Unlimited",
+            "Free Instalasi",
+            "Gaming Router",
+            "Static IP",
+            "24/7 Priority",
+          ],
+          popular: false,
+          active: true,
+        },
+      ];
+
+      let promos = JSON.parse(localStorage.getItem("netstream_promos")) || [
+        {
+          id: 1,
+          title: "Diskon 20% Bulan Pertama",
+          description:
+            "Dapatkan diskon 20% untuk pembayaran bulan pertama semua paket",
+          code: "WELCOME20",
+          active: true,
+        },
+      ];
+
+      let currentAdminSection = "dashboard";
+
+      // Initialize
+      document.addEventListener("DOMContentLoaded", () => {
+        renderUserPackages();
+        renderAdminPackages();
+        renderPromos();
+        updateDashboardStats();
+        checkActivePromo();
+      });
+
+      // Navigation Functions
+      function showUserView() {
+        document.getElementById("userView").classList.remove("hidden");
+        document.getElementById("adminLogin").classList.add("hidden");
+        document.getElementById("adminDashboard").classList.add("hidden");
+        window.scrollTo(0, 0);
+      }
+
+      function showAdminLogin() {
+        document.getElementById("userView").classList.add("hidden");
+        document.getElementById("adminLogin").classList.remove("hidden");
+        document.getElementById("adminDashboard").classList.add("hidden");
+      }
+
+      function showAdminDashboard() {
+        document.getElementById("userView").classList.add("hidden");
+        document.getElementById("adminLogin").classList.add("hidden");
+        document.getElementById("adminDashboard").classList.remove("hidden");
+        showAdminSection("dashboard");
+      }
+
+      function showAdminSection(section) {
+        // Hide all sections
+        ["dashboard", "packages", "promos", "settings"].forEach((s) => {
+          document.getElementById(`admin-${s}`).classList.add("hidden");
+          document.getElementById(`nav-${s}`).classList.remove("bg-mono-800");
+        });
+
+        // Show selected
+        document.getElementById(`admin-${section}`).classList.remove("hidden");
+        document.getElementById(`nav-${section}`).classList.add("bg-mono-800");
+        currentAdminSection = section;
+
+        // Refresh data
+        if (section === "dashboard") updateDashboardStats();
+        if (section === "packages") renderAdminPackages();
+        if (section === "promos") renderPromos();
+      }
+
+      function handleLogin(e) {
+        e.preventDefault();
+        const username = document.getElementById("username").value;
+        const password = document.getElementById("password").value;
+
+        if (username === "admin" && password === "admin123") {
+          showAdminDashboard();
+          document.getElementById("username").value = "";
+          document.getElementById("password").value = "";
+        } else {
+          alert("Username atau password salah!");
+        }
+      }
+
+      function logout() {
+        showUserView();
+      }
+
+      function toggleMobileMenu() {
+        const menu = document.getElementById("mobileMenu");
+        menu.classList.toggle("translate-x-full");
+      }
+
+      function scrollToPackages() {
+        document
+          .getElementById("packagesSection")
+          .scrollIntoView({ behavior: "smooth" });
+      }
+
+      // Package Management
+      function renderUserPackages() {
+        const container = document.getElementById("userPackages");
+        const activePackages = packages.filter((p) => p.active);
+
+        container.innerHTML = activePackages
+          .map(
+            (pkg) => `
+                <div class="bg-mono-900 border ${pkg.popular ? "border-white" : "border-mono-800"} rounded-2xl p-6 card-hover relative overflow-hidden group">
+                    ${pkg.popular ? '<div class="absolute top-0 right-0 bg-white text-mono-900 text-xs font-bold px-3 py-1 rounded-bl-lg">POPULER</div>' : ""}
+                    <div class="mb-4">
+                        <h3 class="text-2xl font-bold mb-2">${pkg.name}</h3>
+                        <p class="text-mono-400 text-sm">${pkg.description}</p>
+                    </div>
+                    <div class="mb-6">
+                        <span class="text-4xl font-bold">${pkg.speed}</span>
+                        <span class="text-mono-400">Mbps</span>
+                    </div>
+                    <div class="mb-6">
+                        <span class="text-3xl font-bold">Rp ${pkg.price.toLocaleString("id-ID")}</span>
+                        <span class="text-mono-500">/bulan</span>
+                    </div>
+                    <ul class="space-y-3 mb-8">
+                        ${pkg.features.map((f) => `<li class="flex items-center text-sm text-mono-300"><i class="fas fa-check text-white mr-3"></i>${f}</li>`).join("")}
+                    </ul>
+                    <button class="w-full py-3 ${pkg.popular ? "bg-white text-mono-900" : "border border-mono-600 hover:bg-mono-800"} rounded-lg font-semibold transition">
+                        Pilih Paket
+                    </button>
+                </div>
+            `,
+          )
+          .join("");
+      }
+
+      function renderAdminPackages() {
+        const tbody = document.getElementById("packagesTableBody");
+        tbody.innerHTML = packages
+          .map(
+            (pkg) => `
+                <tr class="border-b border-mono-800 hover:bg-mono-800/50 transition">
+                    <td class="p-4">
+                        <div class="font-semibold">${pkg.name}</div>
+                        <div class="text-sm text-mono-500">${pkg.description}</div>
+                    </td>
+                    <td class="p-4">${pkg.speed} Mbps</td>
+                    <td class="p-4">Rp ${pkg.price.toLocaleString("id-ID")}</td>
+                    <td class="p-4">
+                        <span class="px-3 py-1 rounded-full text-xs ${pkg.active ? "bg-green-900 text-green-300" : "bg-red-900 text-red-300"}">
+                            ${pkg.active ? "Aktif" : "Nonaktif"}
+                        </span>
+                        ${pkg.popular ? '<span class="ml-2 px-3 py-1 rounded-full text-xs bg-white text-mono-900">Populer</span>' : ""}
+                    </td>
+                    <td class="p-4">
+                        <button onclick="editPackage(${pkg.id})" class="text-blue-400 hover:text-blue-300 mr-3"><i class="fas fa-edit"></i></button>
+                        <button onclick="deletePackage(${pkg.id})" class="text-red-400 hover:text-red-300"><i class="fas fa-trash"></i></button>
+                    </td>
+                </tr>
+            `,
+          )
+          .join("");
+      }
+
+      function openPackageModal() {
+        document.getElementById("packageModal").classList.remove("hidden");
+        document.getElementById("packageModalTitle").textContent =
+          "Tambah Paket Baru";
+        document.getElementById("packageId").value = "";
+        document.getElementById("packageName").value = "";
+        document.getElementById("packageSpeed").value = "";
+        document.getElementById("packagePrice").value = "";
+        document.getElementById("packageDesc").value = "";
+        document.getElementById("packageFeatures").value = "";
+        document.getElementById("packagePopular").checked = false;
+      }
+
+      function closePackageModal() {
+        document.getElementById("packageModal").classList.add("hidden");
+      }
+
+      function editPackage(id) {
+        const pkg = packages.find((p) => p.id === id);
+        if (!pkg) return;
+
+        document.getElementById("packageModal").classList.remove("hidden");
+        document.getElementById("packageModalTitle").textContent = "Edit Paket";
+        document.getElementById("packageId").value = pkg.id;
+        document.getElementById("packageName").value = pkg.name;
+        document.getElementById("packageSpeed").value = pkg.speed;
+        document.getElementById("packagePrice").value = pkg.price;
+        document.getElementById("packageDesc").value = pkg.description;
+        document.getElementById("packageFeatures").value =
+          pkg.features.join(", ");
+        document.getElementById("packagePopular").checked = pkg.popular;
+      }
+
+      function savePackage(e) {
+        e.preventDefault();
+        const id = document.getElementById("packageId").value;
+        const data = {
+          id: id ? parseInt(id) : Date.now(),
+          name: document.getElementById("packageName").value,
+          speed: parseInt(document.getElementById("packageSpeed").value),
+          price: parseInt(document.getElementById("packagePrice").value),
+          description: document.getElementById("packageDesc").value,
+          features: document
+            .getElementById("packageFeatures")
+            .value.split(",")
+            .map((f) => f.trim()),
+          popular: document.getElementById("packagePopular").checked,
+          active: true,
+        };
+
+        if (id) {
+          const index = packages.findIndex((p) => p.id === parseInt(id));
+          packages[index] = data;
+        } else {
+          packages.push(data);
+        }
+
+        localStorage.setItem("netstream_packages", JSON.stringify(packages));
+        closePackageModal();
+        renderAdminPackages();
+        renderUserPackages();
+        updateDashboardStats();
+      }
+
+      function deletePackage(id) {
+        if (confirm("Apakah Anda yakin ingin menghapus paket ini?")) {
+          packages = packages.filter((p) => p.id !== id);
+          localStorage.setItem("netstream_packages", JSON.stringify(packages));
+          renderAdminPackages();
+          renderUserPackages();
+          updateDashboardStats();
+        }
+      }
+
+      // Promo Management
+      function renderPromos() {
+        const container = document.getElementById("promosList");
+        container.innerHTML = promos
+          .map(
+            (promo) => `
+                <div class="bg-mono-900 border ${promo.active ? "border-mono-700" : "border-mono-800 opacity-50"} rounded-xl p-6">
+                    <div class="flex justify-between items-start mb-4">
+                        <div>
+                            <h3 class="font-bold text-lg">${promo.title}</h3>
+                            <p class="text-mono-400 text-sm mt-1">${promo.description}</p>
+                        </div>
+                        <div class="flex space-x-2">
+                            <button onclick="editPromo(${promo.id})" class="text-blue-400 hover:text-blue-300"><i class="fas fa-edit"></i></button>
+                            <button onclick="deletePromo(${promo.id})" class="text-red-400 hover:text-red-300"><i class="fas fa-trash"></i></button>
+                        </div>
+                    </div>
+                    ${promo.code ? `<div class="inline-block px-3 py-1 bg-mono-800 rounded text-sm font-mono mb-4">Kode: ${promo.code}</div>` : ""}
+                    <div class="flex items-center justify-between">
+                        <span class="px-3 py-1 rounded-full text-xs ${promo.active ? "bg-green-900 text-green-300" : "bg-red-900 text-red-300"}">
+                            ${promo.active ? "Aktif" : "Nonaktif"}
+                        </span>
+                    </div>
+                </div>
+            `,
+          )
+          .join("");
+
+        checkActivePromo();
+      }
+
+      function openPromoModal() {
+        document.getElementById("promoModal").classList.remove("hidden");
+        document.getElementById("promoModalTitle").textContent = "Tambah Promo";
+        document.getElementById("promoId").value = "";
+        document.getElementById("promoTitle").value = "";
+        document.getElementById("promoDescription").value = "";
+        document.getElementById("promoCode").value = "";
+        document.getElementById("promoActive").checked = true;
+      }
+
+      function closePromoModal() {
+        document.getElementById("promoModal").classList.add("hidden");
+      }
+
+      function editPromo(id) {
+        const promo = promos.find((p) => p.id === id);
+        if (!promo) return;
+
+        document.getElementById("promoModal").classList.remove("hidden");
+        document.getElementById("promoModalTitle").textContent = "Edit Promo";
+        document.getElementById("promoId").value = promo.id;
+        document.getElementById("promoTitle").value = promo.title;
+        document.getElementById("promoDescription").value = promo.description;
+        document.getElementById("promoCode").value = promo.code || "";
+        document.getElementById("promoActive").checked = promo.active;
+      }
+
+      function savePromo(e) {
+        e.preventDefault();
+        const id = document.getElementById("promoId").value;
+        const data = {
+          id: id ? parseInt(id) : Date.now(),
+          title: document.getElementById("promoTitle").value,
+          description: document.getElementById("promoDescription").value,
+          code: document.getElementById("promoCode").value,
+          active: document.getElementById("promoActive").checked,
+        };
+
+        if (id) {
+          const index = promos.findIndex((p) => p.id === parseInt(id));
+          promos[index] = data;
+        } else {
+          promos.push(data);
+        }
+
+        localStorage.setItem("netstream_promos", JSON.stringify(promos));
+        closePromoModal();
+        renderPromos();
+        updateDashboardStats();
+      }
+
+      function deletePromo(id) {
+        if (confirm("Apakah Anda yakin ingin menghapus promo ini?")) {
+          promos = promos.filter((p) => p.id !== id);
+          localStorage.setItem("netstream_promos", JSON.stringify(promos));
+          renderPromos();
+          updateDashboardStats();
+        }
+      }
+
+      function checkActivePromo() {
+        const activePromo = promos.find((p) => p.active);
+        const banner = document.getElementById("promoBanner");
+
+        if (activePromo) {
+          banner.classList.remove("hidden");
+          document.getElementById("promoText").textContent = activePromo.title;
+          document.getElementById("promoDesc").textContent =
+            activePromo.description;
+        } else {
+          banner.classList.add("hidden");
+        }
+      }
+
+      // Dashboard Stats
+      function updateDashboardStats() {
+        document.getElementById("totalPackages").textContent = packages.length;
+        document.getElementById("activePromos").textContent = promos.filter(
+          (p) => p.active,
+        ).length;
+
+        const avg =
+          packages.length > 0
+            ? packages.reduce((a, b) => a + b.price, 0) / packages.length
+            : 0;
+        document.getElementById("avgPrice").textContent =
+          "Rp " + Math.round(avg).toLocaleString("id-ID");
+      }
+
+      // Mobile Admin Menu
+      function toggleAdminMobileMenu() {
+        // Simplified for demo - would typically slide in a menu
+        if (confirm("Logout dari admin?")) {
+          logout();
+        }
+      }
+
+      // Close modals on outside click
+      window.onclick = function (event) {
+        if (event.target.id === "packageModal") closePackageModal();
+        if (event.target.id === "promoModal") closePromoModal();
+      };
+    </script>
+  </body>
+</html>
